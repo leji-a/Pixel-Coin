@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { useUserStore } from '@/store/User'
+import { UserStore } from '@/store/User'
 import apiBase from './apiBase'
 import CryptoManager from './CryptoManager'
 
@@ -82,7 +82,7 @@ class TransactionsManager {
 
   static async fetchTransaction() {
     try {
-      const store = useUserStore()
+      const store = UserStore()
       const response = await apiBase.get(`/transactions?q={"user_id": "${store.userName}"}`)
       TransactionsManager.Transaction.value = response.data
     } catch (err) {

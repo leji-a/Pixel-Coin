@@ -1,6 +1,6 @@
 <template>
   <div v-if="store.Logged">
-    <Nav />
+    <Nav/>
     <router-view />
   </div>
   <div v-else>
@@ -9,9 +9,9 @@
 </template>
 
 <script setup>
-import { useUserStore } from './store/User';
-import Nav from './components/NavComponent';
-const store = useUserStore();
+import { UserStore } from './store/User';
+import Nav from './components/NavigationComponent';
+const store = UserStore();
 </script>
 
 <style>

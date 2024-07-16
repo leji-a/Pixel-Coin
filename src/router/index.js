@@ -1,5 +1,11 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import LoginView from '@/views/LoginView.vue'
+import HomeView from '@/views/HomeView.vue'
+import OperateView from '@/views/OperateView.vue'
+import HistoryView from '@/views/HistoryView.vue'
+import BalanceView from '@/views/BalanceView.vue'
+import AboutView from '@/views/AboutView.vue'
+
 
 const routes = [
   {
@@ -10,27 +16,27 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: () => import(/* webpackChunkName: "home" */ '@/views/HomeView.vue')
+    component: HomeView
   },
   {
     path: '/operate',
     name: 'Operate',
-    component: () => import(/* webpackChunkName: "operate" */ '@/views/OperateView.vue')
+    component: OperateView
   },
   {
     path: '/history',
     name: 'History',
-    component: () => import(/* webpackChunkName: "history" */ '@/views/HistoryView.vue')
+    component:HistoryView
   },
   {
     path: '/balance',
     name: 'Balance',
-    component: () => import(/* webpackChunkName: "balance" */ '@/views/BalanceView.vue')
+    component:BalanceView
   },
   {
     path: '/about',
     name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/AboutView.vue')
+    component: AboutView
   }
 ]
 const router = createRouter({

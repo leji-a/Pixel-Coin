@@ -1,15 +1,10 @@
 import { defineStore } from 'pinia'
 
-export default UserStore = defineStore('User', {
+export const UserStore = defineStore('User', {
     state: () => {
         return {
             Logged: false,
             Username: '',
-        }
-    },
-    getters: {
-        user(state) {
-            return state.Username
         }
     },
     actions: {

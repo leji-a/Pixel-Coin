@@ -1,20 +1,20 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div v-if="store.Logged">
+    <Nav />
+    <router-view />
+  </div>
+  <div v-else>
+    <router-view :to="{ name: 'Login' }"></router-view>
+  </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script setup>
+import { useUserStore } from './store/User';
+import Nav from './components/NavComponent';
+const store = useUserStore();
+</script>
 
+<style>
 nav {
   padding: 30px;
 }

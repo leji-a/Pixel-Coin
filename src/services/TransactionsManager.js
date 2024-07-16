@@ -4,23 +4,22 @@ import apiBase from './apiBase'
 import CryptoManager from './CryptoManager'
 
 class TransactionsManager {
-  constructor() {
-    this.Transaction = ref([])
+  static Transaction = ref([])
+
+  static getTransactions() {
+    return TransactionsManager.Transaction.value
   }
 
-  getTransactions() { return this.Transaction.value }
-
-  getStatus() {
-    const Manager = new CryptoManager();
+  static getStatus() {
     const balances = [];
     let total = 0;
     let previousCode = '';
 
     // Sort transactions by crypto code
-    const sortedTransactions = this.Transaction.value.sort((a, b) => a.crypto_code.localeCompare(b.crypto_code));
+    const sortedTransactions = TransactionsManager.Transaction.value.sort((a, b) => a.crypto_code.localeCompare(b.crypto_code));
 
     sortedTransactions.forEach((trade, index) => {
-      const coin = Manager.GetCrypto().find(coin => coin.code === trade.crypto_code);
+      const coin = CryptoManager.GetCrypto().find(coin => coin.code === trade.crypto_code);
       if (!coin) return; // Skip if coin is not found
 
       if (previousCode !== trade.crypto_code) {
@@ -55,8 +54,8 @@ class TransactionsManager {
 
     return balances;
   }
-  
-  async deleteTransaction(id) {
+
+  static async deleteTransaction(id) {
     try {
       await apiBase.delete(`/transactions/${id}`)
     } catch (err) {
@@ -64,7 +63,7 @@ class TransactionsManager {
     }
   }
 
-  async editTransaction(transaction) {
+  static async editTransaction(transaction) {
     try {
       await apiBase.patch(`/transactions/${transaction._id}`, transaction)
     } catch (err) {
@@ -72,19 +71,20 @@ class TransactionsManager {
     }
   }
 
-  async postTransaction(transaction) {
+  static async postTransaction(transaction) {
     try {
       const response = await apiBase.post('/transactions', transaction)
+      return response.status >= 200 && response.status < 300 ? true : false;
     } catch (err) {
       console.log(err)
     }
   }
 
-  async fetchTransaction() {
+  static async fetchTransaction() {
     try {
       const store = useUserStore()
       const response = await apiBase.get(`/transactions?q={"user_id": "${store.userName}"}`)
-      this.Transaction.value = response.data
+      TransactionsManager.Transaction.value = response.data
     } catch (err) {
       console.log(err)
     }

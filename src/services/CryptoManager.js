@@ -32,14 +32,13 @@ class CryptoManager {
     // Methods
     GetCrypto() { return this.CryptoCurrency }
     GetOptions() { return this.TradeOptions }
-
+    
     SetCrypto(pCode, pName) {
         this.CryptoCurrency.push({
             code: pCode,
             name: pName
         })
     }
-
     async getPrice(Crypto) {
         try {
             const response = await axios.get(`https://criptoya.com/api/argenbtc/${Crypto}/ars`)

@@ -6,7 +6,7 @@
             <router-link :to="{ name: 'History' }">Historial</router-link>
             <router-link :to="{ name: 'Balance' }">Balance</router-link>
             <router-link :to="{ name: 'About' }">Sobre nosotros</router-link>
-            <button type="button" @click="logOut()">Cerrar Sesion</button>
+            <button type="button" @click="logOut()">Cerrar Sesión</button>
         </nav>
     </div>
 </template>
@@ -17,9 +17,11 @@ import { useRouter } from 'vue-router'
 const route = useRouter();
 const logOut = () => {
     UserStore().Logout()
-    route.push({name: 'Login'})
+    route.push({ name: 'Login' })
 }
 
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

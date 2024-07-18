@@ -26,12 +26,12 @@ const routes = [
   {
     path: '/history',
     name: 'History',
-    component:HistoryView
+    component: HistoryView
   },
   {
     path: '/balance',
     name: 'Balance',
-    component:BalanceView
+    component: BalanceView
   },
   {
     path: '/about',

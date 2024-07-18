@@ -1,10 +1,8 @@
 <template>
   <div>
-   <form>
-     <label for="Usuario">Ingrese un nombre de usuario: </label>
-     <input type="text" id="Usuario" v-model="nombre" placeholder="Nombre de Usuario">
-   </form>
-    <button type="button" @click="ingresar()">Ingresar</button>
+    <label for="usuario">Ingrese un nombre de usuario: </label>
+    <input type="text" id="usuario" v-model="nombre" placeholder="Nombre de Usuario" @keyup.enter="ingresar()">
+    <button type="button" @click="ingresar()" >Ingresar</button>
   </div>
 </template>
 
@@ -16,10 +14,17 @@ import { ref } from 'vue';
 const store = UserStore();
 const route = useRouter();
 const nombre = ref('');
+let isValid = ref(false)
 
-
+const checkUsername = (username) => {
+  const regex = /^[a-zA-Z0-9.]+$/
+  isValid = regex.test(username.value);
+  return isValid;
+}
 const ingresar = () => {
-  store.Login(nombre.value); 
-  route.push({name: 'Home'});
+  if (checkUsername(nombre) == true) {
+    store.Login(nombre.value);
+    route.push({ name: 'Home' });
   }
+}
 </script>

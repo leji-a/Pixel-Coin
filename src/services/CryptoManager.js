@@ -32,7 +32,7 @@ class CryptoManager {
     // Methods
     GetCrypto() { return this.CryptoCurrency }
     GetOptions() { return this.TradeOptions }
-    
+
     SetCrypto(pCode, pName) {
         this.CryptoCurrency.push({
             code: pCode,

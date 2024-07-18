@@ -1,6 +1,6 @@
 <template>
   <div v-if="store.Logged">
-    <Nav/>
+    <Nav />
     <router-view />
   </div>
   <div v-else>

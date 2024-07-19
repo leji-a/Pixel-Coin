@@ -1,13 +1,11 @@
 <template>
   <div class="login-container">
     <div class="login-box">
-      <label for="usuario">Ingrese un nombre de usuario: </label> <br>
-      <br>
       <input type="text" id="usuario" v-model="nombre" placeholder="Nombre de Usuario" @keyup.enter="ingresar()"> <br>
       <button type="button" @click="ingresar()">Ingresar</button>
       <div class="containerError">
-      <p v-if="!isValid" class="error">Introduzca un nombre de usuario que contenga letras y numeros</p>
-    </div>
+        <p v-if="!isValid" class="error">Introduzca un nombre de usuario que contenga letras y numeros</p>
+      </div>
     </div>
   </div>
 </template>
@@ -27,21 +25,24 @@ const isValid = computed(() => {
 });
 
 const ingresar = () => {
-  if (isValid.value) {
-    store.Login(nombre.value);
-    route.push({ name: 'Home' });
-    isValid.value=false;
-  } 
+  do {
+    if (nombre.value === '') {
+      isValid.value = false
+    } else {
+      store.Login(nombre.value);
+      route.push({ name: 'Home' });
+      isValid.value = false;
+    }
+  } while (isValid.value)
 }
 </script>
 
 <style scoped>
-
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 97.7vh;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -78,5 +79,6 @@ button:hover {
 .error {
   color: red;
   margin-top: 10px;
+  font-size: 15px;
 }
 </style>

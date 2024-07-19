@@ -83,7 +83,7 @@ class TransactionsManager {
   static async fetchTransaction() {
     try {
       const store = UserStore()
-      const response = await apiBase.get(`/transactions?q={"user_id": "${store.userName}"}`)
+      const response = await apiBase.get(`/transactions?q={"user_id": "${store.Username}"}`)
       TransactionsManager.Transaction.value = response.data
     } catch (err) {
       console.log(err)

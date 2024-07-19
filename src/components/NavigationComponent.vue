@@ -5,7 +5,7 @@
        <div class="navContainer">
           <nav class="flex items-center gap-6">
              <router-link :to="{ name: 'Home' }" class="nav-link">Pantalla principal</router-link>
-             <router-link :to="{ name: 'Operate' }" class="nav-link">Compra/Venta</router-link>
+             <router-link :to="{ name: 'Operate' }" class="nav-link">Operar</router-link>
              <router-link :to="{ name: 'History' }" class="nav-link">Historial</router-link>
              <router-link :to="{ name: 'Balance' }" class="nav-link">Balance</router-link>
              <router-link :to="{ name: 'About' }" class="nav-link">Sobre nosotros</router-link>
@@ -20,8 +20,6 @@
 <script setup>
 import { UserStore } from '@/store/User'
 import { useRouter } from 'vue-router'
-
-
 
 const route = useRouter();
 const logOut = () => {

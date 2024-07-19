@@ -22,8 +22,8 @@ class CryptoManager {
             name: "purchase"
         },
         {
-            option: "sale",
-            name: "sale"
+            option: "sell",
+            name: "sell"
         },
     ]
     // Constructor

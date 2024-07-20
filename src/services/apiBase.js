@@ -1,4 +1,4 @@
-const axios = require('axios');
+const axios = require('axios')
 
 const apis = [
     {
@@ -33,31 +33,31 @@ const apis = [
         baseURL: 'https://laboratorio3-f36a.restdb.io/rest/',
         headers: { 'x-apikey': '60eb09146661365596af552f' }
     }
-];
+]
 
 async function createApiClient() {
     for (const api of apis) {
         try {
-            const response = await axios.get(api.baseURL + 'transactions', { headers: api.headers });
+            const response = await axios.get(`${api.baseURL}transactions`, { headers: api.headers })
             if (response.status === 200) {
-                return axios.create(api);
+                return axios.create(api)
             }
         } catch (error) {
-            console.error(`Error with API ${api.baseURL}: `, error.message);
+            console.error(`Error with API ${api.baseURL}: `, error.message)
         }
     }
-    throw new Error('All APIs failed');
+    throw new Error('All APIs failed')
 }
 
 async function main() {
     try {
-        const apiClient = await createApiClient();
+        const apiClient = await createApiClient()
         // Realiza requests
-        const response = await apiClient.get('transactions');
-        console.log(response.data);
+        const response = await apiClient.get('transactions')
+        console.log(response.data)
     } catch (error) {
-        console.error('Failed to create API client:', error.message);
+        console.error('Failed to create API client:', error.message)
     }
 }
 
-main();
+main()

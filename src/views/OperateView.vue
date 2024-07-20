@@ -29,7 +29,6 @@ import TransactionsManager from '@/services/TransactionsManager'
 const store = UserStore()
 const router = useRouter()
 const CryptoM = new CryptoManager()
-const TransactionsM = new TransactionsManager()
 
 let operacion = ref({
     user_id: store.usuario,
@@ -40,47 +39,47 @@ let operacion = ref({
     datetime: ''
 })
 
-const actual = new Date();
-const actualString = actual.toISOString().slice(0, 10)
-let date = ref({
-    actual: actualString,
-    hora: '00:00'
-})
-
 const Operate = async () => {
-    const cryptoAmount = Number(operacion.value.crypto_amount);
-
+    const cryptoAmount = Number(operacion.value.crypto_amount)
     // Validate crypto amount
     if (isNaN(cryptoAmount) || cryptoAmount <= 0) {
-        console.log("Invalid crypto amount. Please enter a positive value.");
-        return; // Exit early if validation fails
+        console.log("Invalid crypto amount. Please enter a positive value.")
+        return
     }
 
     // Destructure operation data
-    const { action, cryptoCode, ...rest } = operacion.value;
+    const { action, cryptoCode, ...rest } = operacion.value
 
     try {
-        let resultado;
-        const transactions = await TransactionsM.fetchTransaction();
+        const transactions = await TransactionsManager.fetchTransaction();
+        if (!transactions || transactions.length === 0) {
+            console.error("Error: No transactions retrieved.");
+            return; // Transactions vacio 
+        }
         const moneda = transactions.find(coin => coin.code === cryptoCode);
+        if (!moneda) {
+            console.error("Error: Coin not found in fetched transactions.");
+            return; // No coin 
+        }
+        let resultado
         switch (action) {
             case 'purchase':
-                resultado = await TransactionsM.postTransaction({ ...rest });
-                console.log("Purchase status:", resultado);
-                break;
+                resultado = await TransactionsManager.postTransaction({ ...rest })
+                console.log("Purchase status: ", resultado)
+                break
             case 'sell':
                 if (moneda && moneda.balance >= cryptoAmount) {
-                    resultado = await TransactionsM.postTransaction({ ...rest });
-                    console.log("Sell status:", resultado);
+                    resultado = await TransactionsManager.postTransaction({ ...rest })
+                    console.log("Sell status: ", resultado)
                 } else {
-                    console.log("Insufficient funds. Your balance is lower than the sell amount.");
+                    console.log("Insufficient funds. Your balance is lower than the sell amount.")
                 }
-                break;
+                break
             default:
-                console.error("Invalid action:", action);
+                console.error("Invalid action: ", action)
         }
     } catch (error) {
-        console.error("Error:", error);
+        console.error("Error:", error)
     }
 }
 const option = computed(() => {
@@ -97,33 +96,36 @@ const Fecha = () => {
     )
     operacion.value.datetime = fecha.toISOString()
 }
-
-// Helper functions for better organization
+const actual = new Date()
+const actualString = actual.toISOString().slice(0, 10)
+let date = ref({
+    actual: actualString,
+    hora: '00:00'
+})
+// Funciones de ayuda
 function validateCryptoAmount(amount) {
-    const numberAmount = Number(amount);
-    return isNaN(numberAmount) || numberAmount <= 0 ? 0 : numberAmount;
+    const numberAmount = Number(amount)
+    return isNaN(numberAmount) || numberAmount <= 0 ? 0 : numberAmount
 }
-
 function calculateTotal(price, action, amount) {
     if (action === 'purchase') {
-        return price.totalAsk * amount;
+        return price.totalAsk * amount
     } else {
-        return price.totalBid * amount;
+        return price.totalBid * amount
     }
 }
 const Update = async () => {
-    // Validate and potentially adjust crypto amount
-    const cryptoAmount = validateCryptoAmount(operacion.value.crypto_amount);
+    // Validate and adjust crypto amount
+    const cryptoAmount = validateCryptoAmount(operacion.value.crypto_amount)
 
     if (cryptoAmount > 0) {
-        const Price = await CryptoM.getPrice(operacion.value.crypto_code);
-
-        operacion.value.money = calculateTotal(Price, operacion.value.action, cryptoAmount).toFixed(2);
+        const Price = await CryptoM.getPrice(operacion.value.crypto_code)
+        operacion.value.money = calculateTotal(Price, operacion.value.action, cryptoAmount).toFixed(2)
     } else {
-        // Set money to 0 if invalid or non-positive amount
-        operacion.value.money = 0;
+        // Money 0 if invalid or non-positive amount
+        operacion.value.money = 0
     }
-};
+}
 
 watch(operacion.value, Update)
 watch(date, Fecha)

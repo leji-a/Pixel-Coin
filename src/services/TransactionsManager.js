@@ -9,7 +9,6 @@ class TransactionsManager {
   static getTransactions() {
     return TransactionsManager.Transaction.value
   }
-
   static getStatus() {
     const balances = [];
     let total = 0;
@@ -54,7 +53,6 @@ class TransactionsManager {
 
     return balances;
   }
-
   static async deleteTransaction(id) {
     try {
       await apiBase.delete(`/transactions/${id}`)
@@ -62,7 +60,6 @@ class TransactionsManager {
       console.log(err)
     }
   }
-
   static async editTransaction(transaction) {
     try {
       await apiBase.patch(`/transactions/${transaction._id}`, transaction)
@@ -70,7 +67,6 @@ class TransactionsManager {
       console.log(err)
     }
   }
-
   static async postTransaction(transaction) {
     try {
       const response = await apiBase.post('/transactions', transaction)
@@ -79,8 +75,7 @@ class TransactionsManager {
       console.log(err)
     }
   }
-
-  static async fetchTransaction() {
+  static async fetchTransactions() {
     try {
       const store = UserStore()
       const response = await apiBase.get(`/transactions?q={"user_id": "${store.Username}"}`)

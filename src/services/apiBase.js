@@ -52,12 +52,10 @@ async function createApiClient() {
 async function main() {
     try {
         const apiClient = await createApiClient()
-        // Realiza requests
-        const response = await apiClient.get('transactions')
-        console.log(response.data)
+        return apiClient
     } catch (error) {
         console.error('Failed to create API client:', error.message)
     }
 }
 
-main()
+export default main()

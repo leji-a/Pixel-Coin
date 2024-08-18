@@ -1,7 +1,7 @@
 <template>
     <div v-if="store.Logged">
         Historial
-        <div v-if="!load">
+        <div v-if="!load && movimientos">
             <table v-if="movimientos.length !== 0">
                 <thead>
                     <tr>
@@ -21,11 +21,14 @@
                         <td>{{ movimiento.crypto_amount }}</td>
                         <td>${{ movimiento.money }}</td>
                         <td>{{ formatearFecha(movimiento.datetime) }}</td>
-                        
                     </tr>
                 </tbody>
             </table>
+            <p v-else>No hay movimientos a mostrar</p>
         </div>
+    </div>
+    <div v-else>
+        <button @click="routerPush">Ir al login</button>
     </div>
 
 </template>
@@ -33,23 +36,30 @@
 <script setup>
 import { UserStore } from '@/store/User'
 import { onMounted, ref } from 'vue'
+import { useRouter } from "vue-router"
 import TransactionsManager from '@/services/TransactionsManager';
 import CryptoManager from '@/services/CryptoManager';
+
+const router = useRouter()
+const routerPush = () => {
+    router.push({ name: 'Login' })
+}
 
 let load = ref(true)
 let movimientos = ref([])
 
-const TransactionsM = new TransactionsManager()
 const CryptoM = new CryptoManager()
 const store = UserStore()
 
 const reload = async () => {
     try {
         load.value = true
-        await TransactionsManager.fetchTransaction()
-        movimientos.value = TransactionsManager.fetchTransaction()
+        await TransactionsManager.fetchTransactions()
+        const transactions = TransactionsManager.getTransactions()
+        movimientos.value = transactions
     } catch (err) {
         console.log(err)
+        movimientos.value = []
     } finally {
         load.value = false
     }

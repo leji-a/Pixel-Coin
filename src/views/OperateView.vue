@@ -39,6 +39,16 @@ let operacion = ref({
     datetime: ''
 })
 
+const fetchAndCheckTransactions = async () => {
+    try {
+        await TransactionsManager.fetchTransactions();
+        return TransactionsManager.getTransactions();
+    } catch (error) {
+        console.error("Error fetching transactions:", error);
+        return []; // Return empty array on error
+    }
+}
+
 const Operate = async () => {
     const cryptoAmount = Number(operacion.value.crypto_amount)
     // Validate crypto amount
@@ -51,16 +61,15 @@ const Operate = async () => {
     const { action, cryptoCode, ...rest } = operacion.value
 
     try {
-        const transactions = await TransactionsManager.fetchTransaction();
-        if (!transactions || transactions.length === 0) {
-            console.error("Error: No transactions retrieved.");
-            return; // Transactions vacio 
-        }
-        const moneda = transactions.find(coin => coin.code === cryptoCode);
+        const transactions = await fetchAndCheckTransactions();
+        const transactionsArray = transactions
+        
+        const moneda = transactionsArray.find(coin => coin.code === cryptoCode);
         if (!moneda) {
             console.error("Error: Coin not found in fetched transactions.");
             return; // No coin 
         }
+
         let resultado
         switch (action) {
             case 'purchase':

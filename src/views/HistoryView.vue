@@ -40,16 +40,16 @@ import { useRouter } from "vue-router"
 import TransactionsManager from '@/services/TransactionsManager';
 import CryptoManager from '@/services/CryptoManager';
 
+const CryptoM = new CryptoManager()
+const store = UserStore()
 const router = useRouter()
+
 const routerPush = () => {
     router.push({ name: 'Login' })
 }
 
 let load = ref(true)
 let movimientos = ref([])
-
-const CryptoM = new CryptoManager()
-const store = UserStore()
 
 const reload = async () => {
     try {
@@ -67,7 +67,6 @@ const reload = async () => {
 const moneda = (code) => {
     return CryptoM.GetCrypto().find(coin => coin.code === code)
 }
-
 const operacion = (code) => {
     return CryptoM.GetOptions().find(option => option.option === code)
 }

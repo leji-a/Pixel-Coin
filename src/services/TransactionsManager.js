@@ -60,27 +60,27 @@ class TransactionsManager {
   }
   static async deleteTransaction(id) {
     try {
-      const client = new apiBase()
+      
 
-      await client.main().delete(`/transactions/${id}`)
+      await apiBase.main().delete(`/transactions/${id}`)
     } catch (err) {
       console.log(err)
     }
   }
   static async editTransaction(transaction) {
     try {
-      const client = new apiBase()
+      
 
-      await client.main().patch(`/transactions/${transaction._id}`, transaction)
+      await apiBase.main().patch(`/transactions/${transaction._id}`, transaction)
     } catch (err) {
       console.log(err)
     }
   }
   static async postTransaction(transaction) {
     try {
-      const client = new apiBase()
+      
 
-      const response = await client.main().post("/transactions", transaction)
+      const response = await apiBase.main().post("/transactions", transaction)
       return response.status >= 200 && response.status < 300 ? true : false
     } catch (err) {
       console.log(err)
@@ -89,8 +89,7 @@ class TransactionsManager {
   static async fetchTransactions() {
     try {
       const store = UserStore()
-      const client = new apiBase()
-      const response = await client.main().get(`/transactions?q={"user_id": "${store.Username}"}`)
+      const response =await apiBase.get(`/transactions?q={"user_id": "${store.Username}"}`)
       TransactionsManager.Transaction.value = response.data
     } catch (err) {
       console.log("Error fetching data", err)

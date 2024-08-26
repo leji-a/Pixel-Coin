@@ -61,7 +61,6 @@ class TransactionsManager {
   static async deleteTransaction(id) {
     try {
       
-
       await apiBase.main().delete(`/transactions/${id}`)
     } catch (err) {
       console.log(err)
@@ -78,9 +77,7 @@ class TransactionsManager {
   }
   static async postTransaction(transaction) {
     try {
-      
-
-      const response = await apiBase.main().post("/transactions", transaction)
+      const response = await apiBase.post("/transactions", transaction)
       return response.status >= 200 && response.status < 300 ? true : false
     } catch (err) {
       console.log(err)

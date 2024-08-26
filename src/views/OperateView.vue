@@ -64,7 +64,7 @@ const Operate = async () => {
         const transactions = await fetchAndCheckTransactions()
         const transactionsArray = transactions
         
-        const moneda = transactionsArray.find(coin => coin.code === cryptoCode)
+        const moneda = transactionsArray.find(coin => coin.code === cryptoCode) //revisar code
         if (!moneda) {
             console.error("Error: Coin not found in fetched transactions.")
             return // No coin
@@ -77,7 +77,7 @@ const Operate = async () => {
                 console.log("Purchase status: ", resultado)
                 break
             case 'sell':
-                if (moneda && moneda.balance >= cryptoAmount) {
+                if (moneda && moneda.balance >= cryptoAmount) { //revisar balance
                     resultado = await TransactionsManager.postTransaction({ ...rest })
                     console.log("Sell status: ", resultado)
                 } else {
@@ -118,7 +118,7 @@ function validateCryptoAmount(amount) {
 }
 function calculateTotal(price, action, amount) {
     if (action === 'purchase') {
-        return price.totalAsk * amount
+        return price.totalAsk * amount  
     } else {
         return price.totalBid * amount
     }

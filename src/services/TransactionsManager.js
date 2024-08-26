@@ -14,6 +14,7 @@ class TransactionsManager {
     const balances = []
     const workingBalances = {} // New object for calculations
     let previousCode = ""
+    const Gestion = new CryptoManager 
   
     // Sort transactions by crypto code
     const sortedTransactions = TransactionsManager.Transaction.value.sort(
@@ -21,7 +22,7 @@ class TransactionsManager {
     )
   
     sortedTransactions.forEach((trade, index) => {
-      const coin = CryptoManager.GetCrypto().find(
+     const  coin = Gestion.GetCrypto().find( 
         (coin) => coin.code === trade.crypto_code
       )
       if (!coin) return // Skip if coin is not found
@@ -61,16 +62,14 @@ class TransactionsManager {
   static async deleteTransaction(id) {
     try {
       
-      await apiBase.main().delete(`/transactions/${id}`)
+      await apiBase.delete(`/transactions/${id}`)
     } catch (err) {
       console.log(err)
     }
   }
   static async editTransaction(transaction) {
     try {
-      
-
-      await apiBase.main().patch(`/transactions/${transaction._id}`, transaction)
+      await apiBase.patch(`/transactions/${transaction._id}`, transaction)
     } catch (err) {
       console.log(err)
     }

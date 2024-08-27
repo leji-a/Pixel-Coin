@@ -31,7 +31,7 @@ const router = useRouter()
 const CryptoM = new CryptoManager()
 
 let operacion = ref({
-    user_id: store.usuario,
+    user_id: store.Username,
     action: 'purchase',
     crypto_code: 'btc',
     crypto_amount: 0,
@@ -58,7 +58,7 @@ const Operate = async () => {
     }
 
     // Destructure operation data
-    const { action, cryptoCode, ...rest } = operacion.value
+    const { action, cryptoCode, /*...rest*/ } = operacion.value
 
     try {
         const transactions = await fetchAndCheckTransactions()
@@ -73,12 +73,12 @@ const Operate = async () => {
         let resultado
         switch (action) {
             case 'purchase':
-                resultado = await TransactionsManager.postTransaction({ ...rest })
+                resultado = await TransactionsManager.postTransaction({ ...operacion.value })
                 console.log("Purchase status: ", resultado)
                 break
             case 'sell':
                 if (moneda && moneda.balance >= cryptoAmount) { //revisar balance
-                    resultado = await TransactionsManager.postTransaction({ ...rest })
+                    resultado = await TransactionsManager.postTransaction({ ...operacion.value })
                     console.log("Sell status: ", resultado)
                 } else {
                     console.log("Insufficient funds. Your balance is lower than the sell amount.")

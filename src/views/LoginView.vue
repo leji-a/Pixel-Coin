@@ -4,7 +4,7 @@
       <input type="text" id="usuario" v-model="nombre" placeholder="Nombre de Usuario" @keyup.enter="ingresar()"> <br>
       <button type="button" @click="ingresar()">Ingresar</button>
       <div class="containerError">
-        <p v-if="!isValid" class="error">Introduzca un nombre de usuario que contenga letras y numeros</p>
+        <p v-if="!isValid" class="error">Introduzca un nombre de usuario que contenga letras , numeros y caracteres especiales</p>
       </div>
     </div>
   </div>
@@ -20,12 +20,12 @@ const route = useRouter();
 const nombre = ref('');
 
 const isValid = computed(() => {
-  const regex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]+$/;
+  // Actualiza la expresión regular para permitir caracteres especiales como '.'
+  const regex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9.]+$/;
   return regex.test(nombre.value);
 });
 
 const ingresar = () => {
-  do {
     if (nombre.value === '') {
       isValid.value = false
     } else {
@@ -33,7 +33,6 @@ const ingresar = () => {
       route.push({ name: 'Home' });
       isValid.value = false;
     }
-  } while (isValid.value)
 }
 </script>
 

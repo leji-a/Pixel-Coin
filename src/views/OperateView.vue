@@ -19,6 +19,7 @@
     </div>
 </template>
 
+
 <script setup>
 import { UserStore } from "@/store/User"
 import { useRouter } from "vue-router"
@@ -26,9 +27,11 @@ import { ref, watch, computed, onMounted } from 'vue'
 import CryptoManager from '@/services/CryptoManager'
 import TransactionsManager from '@/services/TransactionsManager'
 
+
 const store = UserStore()
 const router = useRouter()
 const CryptoM = new CryptoManager()
+
 
 let operacion = ref({
     user_id: store.Username,
@@ -38,6 +41,7 @@ let operacion = ref({
     money: 0,
     datetime: ''
 })
+
 
 const fetchAndCheckTransactions = async () => {
     try {
@@ -49,6 +53,51 @@ const fetchAndCheckTransactions = async () => {
     }
 }
 
+
+const monedaPurchase = async () => {
+    try {
+        await TransactionsManager.fetchTransactions()
+        const status = TransactionsManager.getStatus()
+       
+        const moneda = status.find(coin => coin.code === operacion.value.crypto_code)
+        const userBalance = moneda ? moneda.balance : 0
+
+
+        console.log("User balance:", userBalance)
+        console.log("Sell amount:", operacion.value.crypto_amount)
+
+
+        if (userBalance >= Number(operacion.value.crypto_amount)) {
+            const transactionData = {
+                user_id: store.Username,
+                action: 'sale',  // Cambiado a 'sale' para coincidir con la lógica en getStatus
+                crypto_code: operacion.value.crypto_code,
+                crypto_amount: Number(operacion.value.crypto_amount),
+                money: Number(operacion.value.money),
+                datetime: new Date().toISOString()
+            }
+
+
+            console.log("Transaction data:", transactionData)
+
+
+            const resultado = await TransactionsManager.postTransaction(transactionData)
+            if (resultado) {
+                console.log("Sale successful")
+                // Actualizar las transacciones después de una venta exitosa
+                await TransactionsManager.fetchTransactions()
+            } else {
+                console.log("Sale failed")
+            }
+        } else {
+            console.log(`Insufficient funds. Your balance (${userBalance}) is lower than the sell amount (${operacion.value.crypto_amount}).`)
+        }
+    } catch (error) {
+        console.error("Error in monedaPurchase:", error)
+    }
+}
+
+
 const Operate = async () => {
     const cryptoAmount = Number(operacion.value.crypto_amount)
     // Validate crypto amount
@@ -57,18 +106,19 @@ const Operate = async () => {
         return
     }
 
+
     // Destructure operation data
     const { action, cryptoCode, /*...rest*/ } = operacion.value
 
+
     try {
         const transactions = await fetchAndCheckTransactions()
-        const transactionsArray = transactions
-        
-        const moneda = transactionsArray.find(coin => coin.code === cryptoCode) //revisar code
+        const moneda = transactions.find(coin => coin.code === cryptoCode) //revisar code
         if (!moneda) {
             console.error("Error: Coin not found in fetched transactions.")
             return // No coin
         }
+
 
         let resultado
         switch (action) {
@@ -77,12 +127,7 @@ const Operate = async () => {
                 console.log("Purchase status: ", resultado)
                 break
             case 'sell':
-                if (moneda && moneda.balance >= cryptoAmount) { //revisar balance
-                    resultado = await TransactionsManager.postTransaction({ ...operacion.value })
-                    console.log("Sell status: ", resultado)
-                } else {
-                    console.log("Insufficient funds. Your balance is lower than the sell amount.")
-                }
+                monedaPurchase()
                 break
             default:
                 console.error("Invalid action: ", action)
@@ -94,6 +139,7 @@ const Operate = async () => {
 const option = computed(() => {
     return CryptoM.GetOptions().find(operation => operation.option === operacion.value.action)
 })
+
 
 const Fecha = () => {
     const fecha = new Date(
@@ -127,6 +173,7 @@ const Update = async () => {
     // Validate and adjust crypto amount
     const cryptoAmount = validateCryptoAmount(operacion.value.crypto_amount)
 
+
     if (cryptoAmount > 0) {
         const Price = await CryptoM.getPrice(operacion.value.crypto_code)
         operacion.value.money = calculateTotal(Price, operacion.value.action, cryptoAmount).toFixed(2)
@@ -136,14 +183,18 @@ const Update = async () => {
     }
 }
 
+
 watch(operacion.value, Update)
 watch(date, Fecha)
+
 
 const routerPush = () => {
     router.push({ name: 'Login' })
 }
 
+
 onMounted(() => {
     Fecha()
 })
 </script>
+

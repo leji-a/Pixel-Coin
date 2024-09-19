@@ -68,8 +68,10 @@ const moneda = (code) => {
     return CryptoM.GetCrypto().find(coin => coin.code === code)
 }
 const operacion = (code) => {
-    return CryptoM.GetOptions().find(option => option.option === code)
+    const option = CryptoM.GetOptions().find(option => option.option === code)
+    return option ? option : { name: code } // Return the original code as name if no match found
 }
+
 const formatearFecha = (fechaISO) => {
     const fecha = new Date(fechaISO);
 

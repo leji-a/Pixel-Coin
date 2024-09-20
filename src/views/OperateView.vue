@@ -31,6 +31,13 @@
             <button @click="Operate" class="btn-operate">{{ option.name }}</button>
         </div>
     </div>
+    <!-- Modal for successful operation -->
+    <div v-if="showModal" class="modal">
+        <div class="modal-content">
+            <p>Operación exitosa</p>
+            <button @click="closeModal" class="btn-close">Cerrar</button>
+        </div>
+    </div>
     <div v-else class="login-container">
         <button @click="routerPush" class="btn-login">Ir al login</button>
     </div>
@@ -102,6 +109,9 @@ const monedaPurchase = async () => {
                 console.log("Sale successful")
                 // Actualizar las transacciones después de una venta exitosa
                 await TransactionsManager.fetchTransactions()
+                if (resultado) {
+                    showModal.value = true
+                }
             } else {
                 console.log("Sale failed")
             }
@@ -141,9 +151,13 @@ const Operate = async () => {
             case 'purchase':
                 resultado = await TransactionsManager.postTransaction({ ...operacion.value })
                 console.log("Purchase status: ", resultado)
+                if (resultado) {
+                    showModal.value = true
+                }
                 break
             case 'sell':
                 monedaPurchase()
+                console.error("Invalid action: ", action)
                 break
             default:
                 console.error("Invalid action: ", action)
@@ -229,6 +243,12 @@ onMounted(() => {
 
 // Update user balance when crypto_code changes
 watch(() => operacion.value.crypto_code, fetchUserBalance)
+
+const showModal = ref(false)
+
+const closeModal = () => {
+    showModal.value = false
+}
 </script>
 
 <style scoped>
@@ -288,6 +308,38 @@ watch(() => operacion.value.crypto_code, fetchUserBalance)
     width: 80%; /* Ajusta el tamaño horizontal */
     margin-left: auto;
     margin-right: auto;
+}
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.btn-close {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-close:hover {
+    background-color: #0056b3;
 }
 </style>
 

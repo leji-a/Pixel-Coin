@@ -1,24 +1,40 @@
 <template>
-    <div v-if="store.Logged">
-        <p>¿Qué operación hará?</p>
-        <select v-model="operacion.action">
-            <option v-for="operacion in CryptoM.GetOptions()" :key="operacion.option" :value="operacion.option"> {{
-                operacion.name }}</option>
-        </select>
-        <select v-model="operacion.crypto_code">
-            <option v-for="coin in CryptoM.GetCrypto()" :key="coin.code" :value="coin.code"> {{ coin.name }}</option>
-        </select>
-        <input type="number" min="0.000001" v-model="operacion.crypto_amount" placeholder="Cantidad">
-        <p>Cantidad en pesos argentinos {{ operacion.money }}</p>
-        Fecha: <input type="date" v-model="date.fecha" :max="actualString">
-        Hora: <input type="time" v-model="date.hora">
-        <button @click="Operate">{{ option.name }}</button>
+    <div v-if="store.Logged" class="operation-container">
+        <div class="operation-box">
+            <p>¿Qué operación hará?</p>
+            <div class="select-container">
+                <select v-model="operacion.action" class="select-action">
+                    <option v-for="operacion in CryptoM.GetOptions()" :key="operacion.option" :value="operacion.option">
+                        {{ operacion.name }}
+                    </option>
+                </select>
+                <select v-model="operacion.crypto_code" class="select-crypto">
+                    <option v-for="coin in CryptoM.GetCrypto()" :key="coin.code" :value="coin.code">
+                        {{ coin.name }}
+                    </option>
+                </select>
+            </div>
+            <div class="input-container">
+                <input type="number" min="0.000001" v-model="operacion.crypto_amount" placeholder="Cantidad" class="input-amount">
+                <p>Cantidad en pesos argentinos ${{ operacion.money }}</p>
+            </div>
+            <div class="date-time-container">
+                <label>
+                    Fecha: <input type="date" v-model="date.fecha" :max="actualString" class="input-date">
+                </label>
+                <label>
+                    Hora: <input type="time" v-model="date.hora" class="input-time">
+                </label>
+            </div>
+            <p v-if="userBalance>=1">Cantidad de balance de criptomonedas: {{ userBalance }}</p>
+            <p v-else>Cantidad insuficiente de criptomonedas para vender</p>
+            <button @click="Operate" class="btn-operate">{{ option.name }}</button>
+        </div>
     </div>
-    <div v-else>
-        <button @click="routerPush">Ir al login</button>
+    <div v-else class="login-container">
+        <button @click="routerPush" class="btn-login">Ir al login</button>
     </div>
 </template>
-
 
 <script setup>
 import { UserStore } from "@/store/User"
@@ -193,8 +209,85 @@ const routerPush = () => {
 }
 
 
+const userBalance = ref(0)
+
+const fetchUserBalance = async () => {
+    try {
+        await TransactionsManager.fetchTransactions()
+        const status = TransactionsManager.getStatus()
+        const moneda = status.find(coin => coin.code === operacion.value.crypto_code)
+        userBalance.value = moneda ? moneda.balance : 0
+    } catch (error) {
+        console.error("Error fetching user balance:", error)
+    }
+}
+
 onMounted(() => {
     Fecha()
+    fetchUserBalance()
 })
+
+// Update user balance when crypto_code changes
+watch(() => operacion.value.crypto_code, fetchUserBalance)
 </script>
+
+<style scoped>
+.operation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.operation-box {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+    margin-top: -250px; /* Ajusta este valor según sea necesario */
+}
+
+.select-container, .input-container, .date-time-container {
+    margin-bottom: 20px;
+}
+
+.select-action, .select-crypto, .input-amount, .input-date, .input-time {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn-operate, .btn-login {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-operate:hover, .btn-login:hover {
+    background-color: #0056b3;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.input-container, .date-time-container {
+    margin-bottom: 20px;
+    width: 80%; /* Ajusta el tamaño horizontal */
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
 

@@ -1,8 +1,8 @@
 <template>
-    <div v-if="store.Logged">
-        Historial
-        <div v-if="!load && movimientos">
-            <table v-if="movimientos.length !== 0">
+    <div v-if="store.Logged" class="history-container">
+        <h2>Historial de Ventas</h2>
+        <div v-if="!load && movimientos" class="table-container">
+            <table v-if="movimientos.length !== 0" class="history-table">
                 <thead>
                     <tr>
                         <th>Número de movimiento</th>
@@ -30,7 +30,6 @@
     <div v-else>
         <button @click="routerPush">Ir al login</button>
     </div>
-
 </template>
 
 <script setup>
@@ -85,3 +84,43 @@ onMounted(async () => {
     await reload()
 })
 </script>
+
+<style scoped>
+.history-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.table-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.history-table {
+    width: 80%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.history-table th, .history-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.history-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.history-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.history-table tr:hover {
+    background-color: #ddd;
+}
+</style>

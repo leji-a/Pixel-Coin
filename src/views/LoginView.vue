@@ -1,4 +1,7 @@
 <template>
+  <div class="imagen">
+    <img src="/Pixel-Coin/src/assets/Preview.png" alt="Imagen logo">
+  </div>
   <div class="login-container">
     <div class="login-box">
       <input type="text" id="usuario" v-model="nombre" placeholder="Nombre de Usuario" @keyup.enter="ingresar()"> <br>

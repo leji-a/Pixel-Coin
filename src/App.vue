@@ -6,10 +6,12 @@
   <div v-else>
     <router-view :to="{ name: 'Login' }"></router-view>
   </div>
+  <fotterContainer/>
 </template>
 
 <script setup>
 import { UserStore } from './store/User';
+import fotterContainer from './components/FooterComponent.vue'
 import Nav from './components/NavigationComponent';
 const store = UserStore();
 </script>

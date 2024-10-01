@@ -3,7 +3,7 @@ import LoginView from '@/views/LoginView.vue'
 import HomeView from '@/views/HomeView.vue'
 import OperateView from '@/views/OperateView.vue'
 import HistoryView from '@/views/HistoryView.vue'
-import BalanceView from '@/views/BalanceView.vue'
+import ControlView from '@/views/ControlView.vue'
 import AboutView from '@/views/AboutView.vue'
 
 
@@ -29,9 +29,9 @@ const routes = [
     component: HistoryView
   },
   {
-    path: '/balance',
-    name: 'Balance',
-    component: BalanceView
+    path: '/control',
+    name: 'Control',
+    component: ControlView
   },
   {
     path: '/about',

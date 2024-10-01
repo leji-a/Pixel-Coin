@@ -27,14 +27,14 @@
                 </label>
             </div>
             <p v-if="userBalance>=1">Cantidad de balance de criptomonedas: {{ userBalance }}</p>
-            <p v-else>Cantidad insuficiente de criptomonedas para vender</p>
+            <p v-else class="error">Cantidad insuficiente de criptomonedas para vender</p>
             <button @click="Operate" class="btn-operate">{{ option.name }}</button>
         </div>
     </div>
     <!-- Modal for successful operation -->
     <div v-if="showModal" class="modal">
         <div class="modal-content">
-            <p>Operación exitosa</p>
+            <p>Operación exitosa.</p>
             <button @click="closeModal" class="btn-close">Cerrar</button>
         </div>
     </div>
@@ -260,6 +260,9 @@ const closeModal = () => {
     background-color: #f0f0f0;
 }
 
+.error{
+    color: red;
+}
 .operation-box {
     padding: 20px;
     background-color: #ffffff;

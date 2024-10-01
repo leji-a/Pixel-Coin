@@ -1,6 +1,6 @@
 <template>
     <div v-if="store.Logged" class="history-container">
-        <h2>Historial de Ventas</h2>
+        <h2>Panel de control de movimientos</h2>
         <div v-if="!load && movimientos" class="table-container">
             <table v-if="movimientos.length !== 0" class="history-table">
                 <thead>
@@ -21,7 +21,7 @@
                         <td>{{ movimiento.crypto_amount }}</td>
                         <td>${{ movimiento.money }}</td>
                         <td>{{ formatearFecha(movimiento.datetime) }}</td>
-                        <td><button @click="Eliminar(movimiento._id)">Eliminar</button></td>
+                        <td><button @click="Delete(movimiento._id)">Eliminar</button></td>
 
                     </tr>
                 </tbody>
@@ -40,17 +40,16 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from "vue-router"
 import TransactionsManager from '@/services/TransactionsManager';
 import CryptoManager from '@/services/CryptoManager';
-
 const CryptoM = new CryptoManager()
 const store = UserStore()
 const router = useRouter()
 
+let load = ref(true)
+let movimientos = ref([])
+
 const routerPush = () => {
     router.push({ name: 'Login' })
 }
-
-let load = ref(true)
-let movimientos = ref([])
 
 const reload = async () => {
     try {
@@ -85,44 +84,8 @@ const formatearFecha = (fechaISO) => {
 onMounted(async () => {
     await reload()
 })
+const Delete= async (id) => {
+        await TransactionsManager.deleteTransaction(id)
+        await reload()
+    }
 </script>
-
-<style scoped>
-.history-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
-
-.table-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.history-table {
-    width: 80%;
-    border-collapse: collapse;
-    margin: 20px 0;
-}
-
-.history-table th, .history-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-}
-
-.history-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
-
-.history-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.history-table tr:hover {
-    background-color: #ddd;
-}
-</style>

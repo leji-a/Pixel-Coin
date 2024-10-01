@@ -61,7 +61,6 @@ class TransactionsManager {
   }
   static async deleteTransaction(id) {
     try {
-      
       await apiBase.delete(`/transactions/${id}`)
     } catch (err) {
       console.log(err)

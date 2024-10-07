@@ -1,6 +1,6 @@
 <template>
   <div class="imagen">
-    <img src="/Pixel-Coin/src/assets/Preview.png" alt="Imagen logo">
+    <img src="../assets/Preview-removebg-preview.png" alt="Imagen logo">
   </div>
   <div class="login-container">
     <div class="login-box">
@@ -40,6 +40,14 @@ const ingresar = () => {
 </script>
 
 <style scoped>
+.imagen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  background-color: white; /* Ajusta el margen superior según sea necesario */
+}
+
 .login-container {
   display: flex;
   justify-content: center;

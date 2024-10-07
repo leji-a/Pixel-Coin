@@ -15,14 +15,14 @@
                 </thead>
                 <tbody>
                     <tr v-for="(movimiento, index) in movimientos" :key="index">
-                        <td>{{ movimiento._id }}</td>
+                        <td>{{ movimiento._id }} </td>
                         <td>{{ operacion(movimiento.action).name }}</td>
                         <td>{{ moneda(movimiento.crypto_code).name }}</td>
                         <td>{{ movimiento.crypto_amount }}</td>
                         <td>${{ movimiento.money }}</td>
                         <td>{{ formatearFecha(movimiento.datetime) }}</td>
                         <td><button @click="Delete(movimiento._id)">Eliminar</button></td>
-
+                        <td><button @click="Edit(movimiento._id)">Editar</button></td> <!--COMPLETAR-->
                     </tr>
                 </tbody>
             </table>
@@ -88,4 +88,7 @@ const Delete= async (id) => {
         await TransactionsManager.deleteTransaction(id)
         await reload()
     }
+/*const Edit= async (id) => {
+    //Completar
+}  */  
 </script>

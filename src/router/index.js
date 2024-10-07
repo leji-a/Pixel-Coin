@@ -4,7 +4,7 @@ import HomeView from '@/views/HomeView.vue'
 import OperateView from '@/views/OperateView.vue'
 import HistoryView from '@/views/HistoryView.vue'
 import ControlView from '@/views/ControlView.vue'
-import AboutView from '@/views/AboutView.vue'
+import AnalysisView from '@/views/AnalysisView.vue'
 
 
 const routes = [
@@ -34,9 +34,9 @@ const routes = [
     component: ControlView
   },
   {
-    path: '/about',
-    name: 'About',
-    component: AboutView
+    path: '/analysis',
+    name: 'Analysis',
+    component: AnalysisView
   }
 ]
 const router = createRouter({

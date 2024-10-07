@@ -4,11 +4,12 @@
         </router-link>
        <div class="navContainer">
           <nav class="flex items-center gap-6">
+            <img src="../assets/Preview-removebg-preview.png" alt="Imagen logo" class="logo-image">
              <router-link :to="{ name: 'Home' }" class="nav-link">Pantalla principal</router-link>
              <router-link :to="{ name: 'Operate' }" class="nav-link">Operar</router-link>
              <router-link :to="{ name: 'History' }" class="nav-link">Historial</router-link>
              <router-link :to="{ name: 'Control' }" class="nav-link">Panel de control</router-link>
-             <router-link :to="{ name: 'About' }" class="nav-link">Sobre nosotros</router-link>
+             <router-link :to="{ name: 'Analysis' }" class="nav-link">Analisis de cuenta</router-link>
              <button type="button" @click="logOut()" class="nav-link">Cerrar Sesión</button>
            </nav>
        </div>
@@ -29,6 +30,12 @@ const logOut = () => {
 </script>
 
 <style scoped>
+
+.logo-image {
+    width: 50px; 
+    height: auto;
+}
+
 .nav-link {
     display: inline-flex;
     height: 2.25rem;

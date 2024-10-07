@@ -31,16 +31,16 @@
             <button @click="Operate" class="btn-operate">{{ option.name }}</button>
         </div>
     </div>
-    <!-- Modal for successful operation -->
+    <div v-else class="login-container">
+        <button @click="routerPush" class="btn-login">Ir al login</button>
+    </div>
     <div v-if="showModal" class="modal">
         <div class="modal-content">
             <p>Operación exitosa.</p>
             <button @click="closeModal" class="btn-close">Cerrar</button>
         </div>
     </div>
-    <div v-else class="login-container">
-        <button @click="routerPush" class="btn-login">Ir al login</button>
-    </div>
+  
 </template>
 
 <script setup>

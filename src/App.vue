@@ -17,6 +17,28 @@ const store = UserStore();
 </script>
 
 <style>
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+.fotterContainer {
+  background-color: #333;
+  color: #fff;
+  padding: 20px 0;
+  text-align: center;
+}
+
 nav {
   padding: 30px;
 }

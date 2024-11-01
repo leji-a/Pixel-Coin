@@ -181,34 +181,34 @@ const Fecha = () => {
     )
     operacion.value.datetime = fecha.toISOString()
 }
+
 const actual = new Date()
 const actualString = actual.toISOString().slice(0, 10)
 let date = ref({
     actual: actualString,
     hora: '00:00'
 })
-// Funciones de ayuda
-function validateCryptoAmount(amount) {
-    const numberAmount = Number(amount)
-    return isNaN(numberAmount) || numberAmount <= 0 ? 0 : numberAmount
-}
-function calculateTotal(price, action, amount) {
-    if (action === 'purchase') {
-        return price.totalAsk * amount  
-    } else {
-        return price.totalBid * amount
-    }
-}
-const Update = async () => {
-    // Validate and adjust crypto amount
-    const cryptoAmount = validateCryptoAmount(operacion.value.crypto_amount)
 
+const Update = async () => {
+    function validateCryptoAmount(amount) {
+        const numberAmount = Number(amount)
+        return isNaN(numberAmount) || numberAmount <= 0 ? 0 : numberAmount
+    }
+
+    function calculateTotal(price, action, amount) {
+        if (action === 'purchase') {
+            return price.totalAsk * amount
+        } else {
+            return price.totalBid * amount
+        }
+    }
+
+    const cryptoAmount = validateCryptoAmount(operacion.value.crypto_amount)
 
     if (cryptoAmount > 0) {
         const Price = await CryptoM.getPrice(operacion.value.crypto_code)
         operacion.value.money = calculateTotal(Price, operacion.value.action, cryptoAmount).toFixed(2)
     } else {
-        // Money 0 if invalid or non-positive amount
         operacion.value.money = 0
     }
 }

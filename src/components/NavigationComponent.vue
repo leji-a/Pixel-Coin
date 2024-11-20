@@ -9,7 +9,7 @@
              <router-link :to="{ name: 'Operate' }" class="nav-link">Operar</router-link>
              <router-link :to="{ name: 'History' }" class="nav-link">Historial</router-link>
              <router-link :to="{ name: 'Control' }" class="nav-link">Panel de control</router-link>
-             <router-link :to="{ name: 'Analysis' }" class="nav-link">Analisis de cuenta</router-link>
+            
              <button type="button" @click="logOut()" class="nav-link">Cerrar Sesión</button>
            </nav>
        </div>

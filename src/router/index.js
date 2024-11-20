@@ -4,7 +4,6 @@ import HomeView from '@/views/HomeView.vue'
 import OperateView from '@/views/OperateView.vue'
 import HistoryView from '@/views/HistoryView.vue'
 import ControlView from '@/views/ControlView.vue'
-import AnalysisView from '@/views/AnalysisView.vue'
 
 
 const routes = [
@@ -33,11 +32,6 @@ const routes = [
     name: 'Control',
     component: ControlView
   },
-  {
-    path: '/analysis',
-    name: 'Analysis',
-    component: AnalysisView
-  }
 ]
 const router = createRouter({
   history: createWebHashHistory(),

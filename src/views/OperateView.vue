@@ -77,7 +77,7 @@ const fetchAndCheckTransactions = async () => {
 }
 
 
-const monedaPurchase = async () => {
+const monedaSell = async () => {
     try {
         await TransactionsManager.fetchTransactions()
         const status = TransactionsManager.getStatus()
@@ -134,13 +134,13 @@ const Operate = async () => {
 
 
     // Destructure operation data
-    const { action, cryptoCode, /*...rest*/ } = operacion.value
+    const { action, cryptoCode} = operacion.value
 
 
     try {
         const transactions = await fetchAndCheckTransactions()
-        const moneda = transactions.find(coin => coin.code === cryptoCode) //revisar code
-        if (!moneda) {
+        const moneda = transactions.find(coin => coin.code === cryptoCode)
+        if (!moneda && action=='sell') {
             console.error("Error: Coin not found in fetched transactions.")
             return // No coin
         }
@@ -156,7 +156,7 @@ const Operate = async () => {
                 }
                 break
             case 'sell':
-                monedaPurchase()
+                monedaSell()
                 console.error("Invalid action: ", action)
                 break
             default:

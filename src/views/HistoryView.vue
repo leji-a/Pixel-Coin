@@ -21,7 +21,6 @@
                         <td>{{ movimiento.crypto_amount }}</td>
                         <td>${{ movimiento.money }}</td>
                         <td>{{ formatearFecha(movimiento.datetime) }}</td>
-                        <td><button @click="Eliminar(movimiento._id)">Eliminar</button></td>
 
                     </tr>
                 </tbody>

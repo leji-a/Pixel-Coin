@@ -114,7 +114,7 @@ const Delete = async (id) => {
 
 const mensaje = ref('')
 let editingTransaction = ref()
-let showEditModal
+let showEditModal = ref(false)
 
 const validateTransaction = async (transaction) => {
     if (!transaction) {

@@ -134,7 +134,7 @@ const Operate = async () => {
 
 
     // Destructure operation data
-    const { action, cryptoCode} = operacion.value
+    const { action, cryptoCode } = operacion.value
 
 
     try {

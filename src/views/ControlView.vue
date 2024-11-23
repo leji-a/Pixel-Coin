@@ -30,26 +30,47 @@
         </div>
 
         <div v-if="showEditModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2>Editar Movimiento</h2>
-            <div class="form-group">
-                <label>Cantidad:</label>
-                <input 
-                    type="number" 
-                    v-model="editingTransaction.crypto_amount"
-                    step="0.000001"
-                    min="0"
-                >
-            </div>
-            <p v-if="mensaje" class="error-message">{{ mensaje }}</p>
-            
-            <div class="modal-buttons">
-                <button @click="saveEdit">Guardar</button>
-                <button @click="showEditModal = false">Cancelar</button>
+            <div class="modal-content">
+                <h2>Editar Movimiento</h2>
+                <div class="form-group">
+                    <label>Cantidad:</label>
+                    <input 
+                        type="number" 
+                        v-model="editingTransaction.crypto_amount"
+                        step="0.000001"
+                        min="0"
+                    >
+                </div>
+                <div class="form-group">
+                    <label>Tipo de Moneda:</label>
+                    <select v-model="editingTransaction.crypto_code">
+                        <option v-for="coin in CryptoM.GetCrypto()" :key="coin.code" :value="coin.code">
+                            {{ coin.name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Fecha:</label>
+                    <input 
+                        type="date" 
+                        v-model="editingTransaction.datetime"
+                    >
+                </div>
+                <div class="form-group">
+                    <label>Hora:</label>
+                    <input 
+                        type="time" 
+                        v-model="editingTransaction.time"
+                    >
+                </div>
+                <p v-if="mensaje" class="error-message">{{ mensaje }}</p>
+                
+                <div class="modal-buttons">
+                    <button @click="saveEdit">Guardar</button>
+                    <button @click="showEditModal = false">Cancelar</button>
+                </div>
             </div>
         </div>
-    </div>
-
     </div>
     <div v-else>
         <button @click="routerPush">Ir al login</button>
@@ -62,12 +83,16 @@ import { onMounted, ref, watch } from 'vue'
 import { useRouter } from "vue-router"
 import TransactionsManager from '@/services/TransactionsManager';
 import CryptoManager from '@/services/CryptoManager';
+
 const CryptoM = new CryptoManager()
 const store = UserStore()
 const router = useRouter()
 
 let load = ref(true)
 let movimientos = ref({})
+let editingTransaction = ref({ time: '00:00' })
+let showEditModal = ref(false)
+const mensaje = ref('')
 
 const routerPush = () => {
     router.push({ name: 'Login' })
@@ -91,7 +116,7 @@ const moneda = (code) => {
 }
 const operacion = (code) => {
     const option = CryptoM.GetOptions().find(option => option.option === code)
-    return option ? option : { name: code } // Return the original code as name if no match found
+    return option ? option : { name: code }
 }
 
 const formatearFecha = (fechaISO) => {
@@ -111,10 +136,6 @@ const Delete = async (id) => {
     await TransactionsManager.deleteTransaction(id)
     await reload()
 }
-
-const mensaje = ref('')
-let editingTransaction = ref()
-let showEditModal = ref(false)
 
 const validateTransaction = async (transaction) => {
     if (!transaction) {
@@ -169,19 +190,23 @@ const Edit = async (id) => {
 }
 
 const saveEdit = async () => {
-    
     try {
-        mensaje.value = ''
-        const isValid = await validateTransaction(editingTransaction.value)
+        mensaje.value = '';
+        const isValid = await validateTransaction(editingTransaction.value);
 
         if (isValid) {
-            await TransactionsManager.editTransaction(editingTransaction.value)
-            showEditModal.value = false
-            await reload()
+            const selectedDate = new Date(editingTransaction.value.datetime);
+            const [hours, minutes] = editingTransaction.value.time.split(':');
+            selectedDate.setHours(hours);
+            selectedDate.setMinutes(minutes);
+            editingTransaction.value.datetime = selectedDate.toISOString();
+            await TransactionsManager.editTransaction(editingTransaction.value);
+            showEditModal.value = false;
+            await reload();
         }
     } catch (error) {
-        console.error('Error al guardar:', error)
-        mensaje.value = 'Error al guardar los cambios'
+        console.error('Error al guardar:', error);
+        mensaje.value = 'Error al guardar los cambios';
     }
 }
 

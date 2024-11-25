@@ -1,7 +1,10 @@
 <template>
     <div v-if="store.Logged" class="history-container">
         <h2>Historial de Ventas</h2>
-        <div v-if="!load && movimientos" class="table-container">
+        <div v-if="load" class="loading-container">
+            <LoadingSpinner />
+        </div>
+        <div v-else-if="movimientos" class="table-container">
             <table v-if="movimientos.length !== 0" class="history-table">
                 <thead>
                     <tr>
@@ -21,7 +24,6 @@
                         <td>{{ movimiento.crypto_amount }}</td>
                         <td>${{ movimiento.money }}</td>
                         <td>{{ formatearFecha(movimiento.datetime) }}</td>
-
                     </tr>
                 </tbody>
             </table>
@@ -39,6 +41,7 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from "vue-router"
 import TransactionsManager from '@/services/TransactionsManager';
 import CryptoManager from '@/services/CryptoManager';
+import LoadingSpinner from '@/components/LoadingComponent.vue';
 
 const CryptoM = new CryptoManager()
 const store = UserStore()
@@ -64,23 +67,24 @@ const reload = async () => {
         load.value = false
     }
 }
+
 const moneda = (code) => {
     return CryptoM.GetCrypto().find(coin => coin.code === code)
 }
+
 const operacion = (code) => {
     const option = CryptoM.GetOptions().find(option => option.option === code)
-    return option ? option : { name: code } // Return the original code as name if no match found
+    return option ? option : { name: code }
 }
 
 const formatearFecha = (fechaISO) => {
     const fecha = new Date(fechaISO);
-
     const opciones = { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     const formato = new Intl.DateTimeFormat('es-ES', opciones);
     const fechaFormateada = formato.format(fecha);
-
     return fechaFormateada + "hs";
 }
+
 onMounted(async () => {
     await reload()
 })

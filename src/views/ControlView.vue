@@ -1,7 +1,10 @@
 <template>
     <div v-if="store.Logged" class="history-container">
         <h2>Panel de control de movimientos</h2>
-        <div v-if="!load && movimientos" class="table-container">
+        <div v-if="load" class="loading-container">
+            <LoadingSpinner />
+        </div>
+        <div v-else-if="movimientos" class="table-container">
             <table v-if="movimientos.length !== 0" class="history-table">
                 <thead>
                     <tr>
@@ -83,6 +86,7 @@ import { onMounted, ref, watch } from 'vue'
 import { useRouter } from "vue-router"
 import TransactionsManager from '@/services/TransactionsManager';
 import CryptoManager from '@/services/CryptoManager';
+import LoadingSpinner from '@/components/LoadingComponent.vue';
 
 const CryptoM = new CryptoManager()
 const store = UserStore()
@@ -111,6 +115,7 @@ const reload = async () => {
         load.value = false
     }
 }
+
 const moneda = (code) => {
     return CryptoM.GetCrypto().find(coin => coin.code === code)
 }
@@ -121,13 +126,12 @@ const operacion = (code) => {
 
 const formatearFecha = (fechaISO) => {
     const fecha = new Date(fechaISO);
-
     const opciones = { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     const formato = new Intl.DateTimeFormat('es-ES', opciones);
     const fechaFormateada = formato.format(fecha);
-
     return fechaFormateada + "hs";
 }
+
 onMounted(async () => {
     await reload()
 })
@@ -143,19 +147,16 @@ const validateTransaction = async (transaction) => {
         return false
     }
 
-    // Validar que el monto sea un número positivo
     const amount = Number(transaction.crypto_amount)
     if (!amount || amount <= 0) {
         mensaje.value = "El monto debe ser un número positivo"
         return false
     }
 
-    // Compra, directamente
     if (transaction.action === 'purchase') { 
         return true 
     }
 
-    // Venta, valida balance
     const accountBalance = TransactionsManager.getStatus()
     if (accountBalance.length === 0) {
         mensaje.value = "No hay balance disponible"
@@ -175,8 +176,8 @@ const validateTransaction = async (transaction) => {
 
     return true
 }
-const Edit = async (id) => {
 
+const Edit = async (id) => {
     mensaje.value = ''
     await TransactionsManager.fetchTransactions()
     
@@ -284,5 +285,9 @@ watch(movimientos.value, Update)
 
 .modal-buttons button {
     padding: 8px 16px;
+}
+
+.history-table, .loading-container {
+    margin-bottom: 20px;
 }
 </style>

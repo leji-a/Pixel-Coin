@@ -1,18 +1,23 @@
 <template>
-  <div v-if="store.Logged">
-    <Nav />
-    <router-view />
+  <div id="app">
+    <div v-if="store.Logged" class="main-container">
+      <Nav />
+      <div class="content-container">
+        <router-view />
+      </div>
+    </div>
+    <div v-else>
+      <router-view :to="{ name: 'Login' }" />
+    </div>
+    <fotterContainer />
   </div>
-  <div v-else>
-    <router-view :to="{ name: 'Login' }"></router-view>
-  </div>
-  <fotterContainer/>
 </template>
 
 <script setup>
 import { UserStore } from './store/User';
-import fotterContainer from './components/FooterComponent.vue'
+import fotterContainer from './components/FooterComponent.vue';
 import Nav from './components/NavigationComponent';
+
 const store = UserStore();
 </script>
 
@@ -28,27 +33,36 @@ html, body {
   min-height: 100vh;
 }
 
-main {
+/* Contenedor principal con barra lateral y contenido */
+.main-container {
+  display: flex;
   flex: 1;
+  height: 100vh; /* Asegura que ocupe toda la pantalla */
 }
 
+/* Contenedor del contenido principal */
+.content-container {
+  flex: 1; /* Ocupa el espacio restante después de la barra lateral */
+  overflow-y: auto; /* Permite desplazamiento si el contenido es grande */
+  background-color: #ffffff;
+}
+
+/* Footer */
 .fotterContainer {
-  background-color: #333;
-  color: #fff;
-  padding: 20px 0;
   text-align: center;
 }
 
+/* Navegación */
 nav {
-  padding: 30px;
+  padding: 50px;
 }
 
 nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #8bc2fa;
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: #39a775;
 }
 </style>

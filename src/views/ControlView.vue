@@ -1,8 +1,9 @@
 <template>
     <div v-if="store.Logged" class="history-container">
         <h2>Panel de control de movimientos</h2>
-        <div v-if="load" class="loading-container">
-            <LoadingSpinner />
+        <div v-if="load" class="loader-container">
+            <span class="loader"></span>
+            <p class="loading-text">Cargando movimientos...</p>
         </div>
         <div v-else-if="movimientos" class="table-container">
             <table v-if="movimientos.length !== 0" class="history-table">
@@ -86,7 +87,6 @@ import { onMounted, ref, watch } from 'vue'
 import { useRouter } from "vue-router"
 import TransactionsManager from '@/services/TransactionsManager';
 import CryptoManager from '@/services/CryptoManager';
-import LoadingSpinner from '@/components/LoadingComponent.vue';
 
 const CryptoM = new CryptoManager()
 const store = UserStore()
@@ -239,6 +239,80 @@ watch(movimientos.value, Update)
 </script>
 
 <style scoped>
+.history-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem;
+}
+
+.history-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 60px;
+    color: #000000;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 20px 80px rgb(0, 0, 0);
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    margin: 0;
+}
+
+.history-table th {
+    background-color: #182c42;
+    color: white;
+    padding: 12px;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.history-table td {
+    padding: 12px;
+    font-size: 14px;
+    color: #000000;
+    border-bottom: 1px solid #ddd;
+}
+
+.history-table tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+.history-table tr:hover {
+    background-color: #8895a1;
+}
+
+.loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 10px dotted #681474;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+.loading-text {
+    margin-top: 10px;
+    color: #000000;
+    font-size: 20px;
+}
 
 .modal-overlay {
     position: fixed;
@@ -285,9 +359,5 @@ watch(movimientos.value, Update)
 
 .modal-buttons button {
     padding: 8px 16px;
-}
-
-.history-table, .loading-container {
-    margin-bottom: 20px;
 }
 </style>

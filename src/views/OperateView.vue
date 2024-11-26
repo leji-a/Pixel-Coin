@@ -134,7 +134,7 @@ const Operate = async () => {
 
 
     // Destructure operation data
-    const { action, cryptoCode } = operacion.value
+    const { action, cryptoCode} = operacion.value
 
 
     try {
@@ -252,65 +252,73 @@ const closeModal = () => {
 </script>
 
 <style scoped>
-.operation-container {
+/* Estilos generales */
+.operation-container, .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
+    background: linear-gradient(50deg, #d6a3eb, #07005f);
+    background-size: 200%;
+    animation: gradientAnimation 5s ease infinite;
 }
 
-.error{
-    color: red;
+/* Animación para el degradado */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
-.operation-box {
-    padding: 20px;
+
+
+.operation-box, .login-container {
+    padding: 30px;
     background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    border-color: black;
+    border-block-end-style:solid;
+    border-block-start-style:solid;
+    border-radius: 12px;
+    box-shadow: 0 30px 50px rgb(5, 5, 5);
+    width: 100%;
+    max-width: 400px;
     text-align: center;
-    margin-top: -250px; /* Ajusta este valor según sea necesario */
 }
 
+/* Estilo para los inputs y selects */
 .select-container, .input-container, .date-time-container {
     margin-bottom: 20px;
 }
 
 .select-action, .select-crypto, .input-amount, .input-date, .input-time {
-    width: 100%;
-    padding: 10px;
+    width: 95%;
+    padding: 12px;
     margin-top: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 3px solid #56186e9f;
+    border-radius: 6px;
 }
 
 .btn-operate, .btn-login {
-    padding: 10px 20px;
-    background-color: #007bff;
+    padding: 20px 26px;
+    background-color: #0f5324;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .btn-operate:hover, .btn-login:hover {
-    background-color: #0056b3;
+    background-color: #0d3628;
 }
 
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
-}
-
-.input-container, .date-time-container {
-    margin-bottom: 20px;
-    width: 80%; /* Ajusta el tamaño horizontal */
-    margin-left: auto;
-    margin-right: auto;
+.error {
+    color: #e74c3c;
 }
 
 .modal {
@@ -327,22 +335,21 @@ const closeModal = () => {
 
 .modal-content {
     background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
+    padding: 30px;
+    border-radius: 12px;
     text-align: center;
 }
 
 .btn-close {
-    padding: 10px 20px;
-    background-color: #007bff;
+    padding: 12px 24px;
+    background-color: #28a745;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
 }
 
 .btn-close:hover {
-    background-color: #0056b3;
+    background-color: #218838;
 }
 </style>
-

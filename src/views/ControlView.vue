@@ -15,6 +15,8 @@
                         <th>Cantidad</th>
                         <th>Total</th>
                         <th>Fecha y Hora</th>
+                        <th></th> <!--Acciones-->
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>

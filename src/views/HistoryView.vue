@@ -32,7 +32,9 @@
       </div>
     </div>
     <div v-else class="login-container">
-      <button @click="routerPush" class="btn-login">Ir al Login</button>
+        <h1 class="error-title">NO DEBERIAS ESTAR AQUI!!!!</h1>
+        <h3 class="error-message">Debes logearte para poder utilizar la página</h3>
+        <button @click="volverAlLogin()">Volver al inicio</button>
     </div>
   </template>
   
@@ -45,11 +47,11 @@
   
   const CryptoM = new CryptoManager();
   const store = UserStore();
-  const router = useRouter();
-  
-  const routerPush = () => {
-    router.push({ name: 'Login' });
-  };
+  const route = useRouter();
+
+  const volverAlLogin = () => {
+    route.push({ name: 'Login' });
+};
   
   let load = ref(true);
   let movimientos = ref([]);
@@ -198,5 +200,40 @@
   
   .btn-login:hover {
     background-color: #7528cc;
+}
+
+.error-title {
+    font-size: 2rem;
+    color: #f44336;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.error-message {
+    font-size: 1.4rem;
+    color: #fff;
+    margin-top: 10px;
+}
+
+/* Botón */
+button {
+    background-color: #8e24aa;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.1s ease, transform 0.1s ease;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #7b1fa2;
+    transform: scale(1.02);
+}
+
+button:active {
+    transform: scale(0.98);
 }
 </style>

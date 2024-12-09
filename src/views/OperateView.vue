@@ -138,7 +138,6 @@ const Operate = async () => {
     // Destructure operation data
     const { action, cryptoCode} = operacion.value
 
-
     try {
         const transactions = await fetchAndCheckTransactions()
         const moneda = transactions.find(coin => coin.code === cryptoCode)
@@ -175,11 +174,11 @@ const option = computed(() => {
 
 const Fecha = () => {
     const fecha = new Date(
-        parseInt(date.value.actual.slice(0, 4)),
-        parseInt(date.value.actual.slice(5, 7)) - 1,
-        parseInt(date.value.actual.slice(8, 10)),
-        parseInt(date.value.hora.slice(0, 2)),
-        parseInt(date.value.hora.slice(3, 5))
+        parseInt(date.value.actual.slice(0, 4)), //anio
+        parseInt(date.value.actual.slice(5, 7)) - 1, //mes
+        parseInt(date.value.actual.slice(8, 10)), //dia
+        parseInt(date.value.hora.slice(0, 2)),//hora
+        parseInt(date.value.hora.slice(3, 5))//min
     )
     operacion.value.datetime = fecha.toISOString()
 }
@@ -211,7 +210,7 @@ const Update = async () => {
         const Price = await CryptoM.getPrice(operacion.value.crypto_code)
         operacion.value.money = calculateTotal(Price, operacion.value.action, cryptoAmount).toFixed(2)
     } else {
-        operacion.value.money = 0
+        operacion.value.money = 0//ja
     }
 }
 

@@ -59,9 +59,10 @@
   const reload = async () => {
     try {
       load.value = true;
-      await TransactionsManager.fetchTransactions();
-      movimientos.value = TransactionsManager.getTransactions();
-    } catch (err) {
+      const datos = await TransactionsManager.fetchTransactions();
+      console.log(datos,"datos");
+      movimientos.value = datos
+        } catch (err) {
       console.log(err);
       movimientos.value = [];
     } finally {

@@ -11,7 +11,7 @@
             </div>
         </div>
         <div v-else class="content">
-            <h1 class="error-title">NO DEBERIAS ESTAR AQUI!!!!</h1>
+            <h1         class="error-title">NO DEBERIAS ESTAR AQUI!!!!</h1>
             <h3 class="error-message">Debes logearte para poder utilizar la página</h3>
             <button @click="volverAlLogin()">Volver al inicio</button>
         </div>

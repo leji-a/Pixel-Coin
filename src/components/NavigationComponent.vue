@@ -29,7 +29,7 @@
   };
   </script>
   
-  <style scoped>
+<style scoped>
   /* Contenedor principal */
   .sidebar-container {
     display: flex;
